@@ -19,21 +19,28 @@ void addTree(Tree*& root, int value, ofstream& outFile) {
 // Печать дерева
 void printTree(Tree* root, int level) {
     if (root != nullptr) {
-        printTree(root->right, level + 1); // Сначала обрабатываем правое поддерево
-
-        // Печатаем текущий узел с отступами
+        printTree(root->right, level + 1);
         for (int i = 0; i < level; ++i) {
             cout << "   ";
         }
         cout << root->value << endl;
-
-        printTree(root->left, level + 1); // Затем обрабатываем левое поддерево
+        printTree(root->left, level + 1);
     }
+}
+
+// Подсчёт количества узлов в дереве
+int countNumNodes(Tree* root) {
+    if (root == nullptr) {
+        return 0;
+    }
+    return 1 + countNumNodes(root->left) + countNumNodes(root->right);
 }
 
 // Проверка на полное дерево
 bool checkComplete(Tree* root, int index, int numberNodes, ofstream& outFile) {
-    if (!root) return true;
+    if (!root) {
+        return true;
+    }
 
     if (index >= numberNodes) {
         outFile << "COMPLETE: no" << endl;
@@ -43,6 +50,20 @@ bool checkComplete(Tree* root, int index, int numberNodes, ofstream& outFile) {
 
     return checkComplete(root->left, 2 * index + 1, numberNodes, outFile) &&
            checkComplete(root->right, 2 * index + 2, numberNodes, outFile);
+}
+
+// Проверка на полноту бинарного дерева (главная функция)
+void isCompleteBinaryTree(Tree* root, ofstream& outFile) {
+    int nodeCount = countNumNodes(root); // Считаем количество узлов
+    int index = 0; // Начинаем с индекса 0
+
+    if (checkComplete(root, index, nodeCount, outFile)) {
+        outFile << "COMPLETE: yes" << endl;
+        cout << "Дерево является полным." << endl;
+    } else {
+        outFile << "COMPLETE: no" << endl;
+        cout << "Дерево не является полным." << endl;
+    }
 }
 
 // Поиск элемента
@@ -56,12 +77,4 @@ bool searchTree(Tree* root, int value, ofstream& outFile) {
     }
 
     return searchTree(root->left, value, outFile) || searchTree(root->right, value, outFile);
-}
-
-// Подсчёт количества узлов в дереве
-int countNumNodes(Tree* root) {
-    if (root == nullptr) {
-        return 0;
-    }
-    return 1 + countNumNodes(root->left) + countNumNodes(root->right);
 }
