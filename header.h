@@ -89,7 +89,7 @@ void Treecom(Tree*& root, const string& command, ofstream& outFile);
 int countNumNodes(Tree* root);
 
 struct SimpleArray {
-    int* data;       // Указатель на массив
+    string* data;    // Указатель на массив строк
     int size;        // Текущий размер массива
     int capacity;    // Вместимость массива
 
@@ -98,14 +98,13 @@ struct SimpleArray {
 };
 
 // Функции работы с массивом
-void add(SimpleArray& arr, int value);
-void addAtIndex(SimpleArray& arr, int index, int value);
-void removeAtIndex(SimpleArray& arr, int index);
-void getItem(const SimpleArray& arr, int index);
-void replaceItem(SimpleArray& arr, int index, int value);
+void add(SimpleArray& arr, const string& value);
+void addAtIndex(SimpleArray& arr, const string& index, const string& value);
+void removeAtIndex(SimpleArray& arr, const string& index);
+void getItem(const SimpleArray& arr, const string& index);
+void replaceItem(SimpleArray& arr, const string& index, const string& value);
 void printArray(const SimpleArray& arr);
 void getLength(const SimpleArray& arr);
-void Arraycom(SimpleArray& arr, const string& command);
 
 // Структура для хранения пары ключ-значение
 struct KeyValue {
@@ -113,23 +112,33 @@ struct KeyValue {
     string value;
 };
 
-// Хеш-таблица с обработкой коллизий
-struct HashTable {
+struct Node {
+    string key;
+    string value;
+    Node* next;
+
+    Node(const string& k, const string& v) : key(k), value(v), next(nullptr) {}
+};
+// Класс хеш-таблицы
+class HashTable {
+private:
     int size;                  // Размер таблицы
-    int* buckets;              // Массив для хранения индексов (начало цепочек)
+    int* buckets;              // Массив для хранения индексов
     KeyValue* elements;        // Массив для хранения элементов
-    int capacity;              // Вместимость элементов
     int elementCount;          // Текущее количество элементов
 
+    int hashFunction(const string& key);  // Хеш-функция
+    int findSlot(const string& key, bool isInsert); // Поиск слота для ключа
+
+public:
     HashTable(int s);          // Конструктор
     ~HashTable();              // Деструктор
 
-    int hashFunction(const string& key);  // Хеш-функция
     void HSET(const string& key, const string& value, ofstream& outFile); // Добавление элемента
     void HDEL(const string& key, ofstream& outFile);                     // Удаление элемента
     string HGET(const string& key, ofstream& outFile);                   // Получение значения по ключу
     void PRINT(ofstream& outFile);                                       // Печать таблицы
-};
+};                                       // Печать таблицы
 
 void clearFile(const std::string& fileName);
 void Listcom(ListNode*& head, const string& command, ofstream& outFile);
