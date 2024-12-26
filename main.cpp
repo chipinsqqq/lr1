@@ -27,7 +27,7 @@ void Listcom(ListNode*& head, const string& command, ofstream& outFile) {
 // Выполнение команды для двусвязного списка
 void DListcom(DoubleListNode*& head, DoubleListNode*& tail, const string& command, ofstream& outFile) {
     if (command.rfind("DPUSH", 0) == 0) {
-        string value = command.substr(6); // Извлечение значения после "DPUSH "
+        string value = command.substr(6); // еИзвлечение значения после "DPUSH "
         dlistInsertHead(head, tail, value, outFile, "DPUSH");
     } else if (command.rfind("DAPPEND", 0) == 0) {
         string value = command.substr(8); // Извлечение значения после "DAPPEND "
@@ -106,23 +106,23 @@ void Treecom(Tree*& root, const string& command, ofstream& outFile) {
 // Выполнение команды для массива
 void Arraycom(SimpleArray& arr, const string& command) {
     if (command.rfind("AADD", 0) == 0) {
-        int value = stoi(command.substr(5));
+        string value = command.substr(5);
         add(arr, value);
     } else if (command.rfind("ADDINDEX", 0) == 0) {
         size_t firstSpace = command.find(' ', 9);
-        int index = stoi(command.substr(9, firstSpace - 9));
-        int value = stoi(command.substr(firstSpace + 1));
+        string index = command.substr(9, firstSpace - 9);
+        string value = command.substr(firstSpace + 1);
         addAtIndex(arr, index, value);
     } else if (command.rfind("AREMOVE", 0) == 0) {
-        int index = stoi(command.substr(8));
+        string index = command.substr(8);
         removeAtIndex(arr, index);
     } else if (command.rfind("AREPLACE", 0) == 0) {
         size_t firstSpace = command.find(' ', 9);
-        int index = stoi(command.substr(9, firstSpace - 9));
-        int value = stoi(command.substr(firstSpace + 1));
+        string index = command.substr(9, firstSpace - 9);
+        string value = command.substr(firstSpace + 1);
         replaceItem(arr, index, value);
     } else if (command.rfind("AGET", 0) == 0) {
-        int index = stoi(command.substr(5));
+        string index = command.substr(5);
         getItem(arr, index);
     } else if (command == "PRINT") {
         printArray(arr);
